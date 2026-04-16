@@ -1,0 +1,14 @@
+{
+  "name": "international-polytechnic",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "",
+  "private": true,
+  "scripts": {},
+  "keywords": [],
+  "author": {
+    "name": "Juan Antonio Ceballos",
+    "email": "juan.ceballos@pi.edu.co"
+  },
+  "packageManager": "pnpm@10.33.0"
+}
