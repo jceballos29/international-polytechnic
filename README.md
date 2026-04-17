@@ -32,11 +32,11 @@ docker compose up postgresql redis -d
 # 3. Configurar credenciales locales de BD (una sola vez por máquina)
 cd src/apps/identity/src/Identity.API
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" \
-  "Host=localhost;Port=5432;Database=identity_db;Username=postgres;Password=<tu-contraseña>"
+  "Host=localhost;Port=5432;Database=identity_db;Username=postgres;Password=secret"
 
 cd ../../../../apps/gradus/src/Gradus.API
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" \
-  "Host=localhost;Port=5432;Database=gradus_db;Username=postgres;Password=<tu-contraseña>"
+  "Host=localhost;Port=5432;Database=gradus_db;Username=postgres;Password=secret"
 
 # 4. Ver el grafo de proyectos
 pnpm graph
