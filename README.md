@@ -1,12 +1,6 @@
-# International Polytechnic - Monorepo
+# International Polytechnic
 
 Sistema de gestión universitaria con autenticación centralizada (SSO).
-
-## Estructura
-
-- `apps/`: Aplicaciones
-- `packages/`: Librerías compartidas
-
 
 ## Productos
 
@@ -45,7 +39,4 @@ pnpm graph
 
 - `docs/plan.md` — Arquitectura completa
 - `docs/tasks.md` — Estado de las tareas
-
-## Licencia
-
-MIT
+- `CLAUDE.md` — Contexto para Claude Code

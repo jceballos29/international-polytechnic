@@ -5,6 +5,7 @@
 **/obj/
 **/*.user
 **/.vs/
+/artifacts/
 
 # ==========================================
 # Node.js / Next.js
@@ -12,11 +13,20 @@
 **/node_modules/
 **/.next/
 **/out/
+test-output
+dist/
+coverage/
 
 # ==========================================
 # Nx
 # ==========================================
 .nx/
+
+# ==========================================
+# Claude Code / AI Agents
+# ==========================================
+.claude/worktrees
+.claude/settings.local.json
 
 # ==========================================
 # Variables de entorno — NUNCA al repo
