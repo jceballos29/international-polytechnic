@@ -1,0 +1,15 @@
+{
+	"name": "Gradus.API",
+	"tags": ["type:backend", "scope:gradus"],
+	"implicitDependencies": ["Identity.API"],
+	"targets": {
+		"dev": {
+			"executor": "nx:run-commands",
+			"continuous": true,
+			"options": {
+				"cwd": "src/apps/gradus/src/Gradus.API",
+				"command": "dotnet watch"
+			}
+		}
+	}
+}

@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Gradus.Domain\Gradus.Domain.csproj" />
+    <ProjectReference Include="..\Gradus.Application\Gradus.Application.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -15,9 +15,9 @@ arrancan en paralelo. Las apps deben manejar que la API no esté lista inmediata
 
 ### Tipos de dependencias
 
-| Tipo | Cómo se detecta | Cuándo usarlo |
-|------|----------------|---------------|
-| `static` | Nx analiza `import` en el código | Librerías compartidas en el mismo repo |
+| Tipo       | Cómo se detecta                         | Cuándo usarlo                                                          |
+| ---------- | --------------------------------------- | ---------------------------------------------------------------------- |
+| `static`   | Nx analiza `import` en el código        | Librerías compartidas en el mismo repo                                 |
 | `implicit` | Declarada manualmente en `project.json` | Proyectos en distintos lenguajes (Next.js → .NET) o SSO/redirect flows |
 
 ### `namedInputs` — qué invalida el cache
@@ -69,14 +69,14 @@ Identity.Domain
 
 ### Dependencias explícitas por proyecto
 
-| Proyecto | `implicitDependencies` | Razón |
-|----------|----------------------|-------|
-| `Identity.API` | — | Raíz de autenticación |
-| `identity-ui` | `Identity.API` | Login UI, llama directamente al API |
-| `admin-panel` | `identity-ui` | SSO redirect a identity-ui para login |
-| `portal` | `identity-ui`, `Identity.API` | SSO redirect + llamadas directas al API |
-| `Gradus.API` | `Identity.API` | Valida tokens JWT emitidos por Identity.API |
-| `gradus-ui` | `identity-ui`, `Identity.API`, `Gradus.API` | SSO redirect + validación de token + datos de dominio |
+| Proyecto       | `implicitDependencies`                                | Razón                                                                           |
+| -------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `Identity.API` | —                                                     | Raíz de autenticación                                                           |
+| `identity-ui`  | `Identity.API`                                        | Login UI, llama directamente al API                                             |
+| `admin-panel`  | `identity-ui`                                         | SSO redirect a identity-ui para login                                           |
+| `portal`       | `identity-ui`, `Identity.API`                         | SSO redirect + llamadas directas al API                                         |
+| `Gradus.API`   | `Identity.API`                                        | Valida tokens JWT emitidos por Identity.API                                     |
+| `gradus-ui`    | `identity-ui`, `Identity.API`, `Gradus.API`, `portal` | SSO redirect + validación de token + datos de dominio + navegación desde portal |
 
 **Regla del escenario B (SSO centralizado):** Las apps frontend solo declaran `identity-ui`
 como dependencia directa (no `Identity.API`), porque no llaman al API de auth directamente —
@@ -124,16 +124,16 @@ los proyectos .NET exponen un target `dev` que internamente llama a `dotnet watc
 ```json
 // apps/identity/src/Identity.API/project.json
 {
-  "targets": {
-    "dev": {
-      "executor": "nx:run-commands",
-      "continuous": true,
-      "options": {
-        "cwd": "apps/identity/src/Identity.API",
-        "command": "dotnet watch"
-      }
-    }
-  }
+	"targets": {
+		"dev": {
+			"executor": "nx:run-commands",
+			"continuous": true,
+			"options": {
+				"cwd": "apps/identity/src/Identity.API",
+				"command": "dotnet watch"
+			}
+		}
+	}
 }
 ```
 

@@ -15,8 +15,8 @@ psql -v ON_ERROR_STOP=1 \
      --username "$POSTGRES_USER" \
      --dbname "$POSTGRES_DB" <<-EOSQL
 
-    CREATE DATABASE universitas_db;
-    GRANT ALL PRIVILEGES ON DATABASE universitas_db TO $POSTGRES_USER;
+    CREATE DATABASE portal_db;
+    GRANT ALL PRIVILEGES ON DATABASE portal_db TO $POSTGRES_USER;
 
     CREATE DATABASE gradus_db;
     GRANT ALL PRIVILEGES ON DATABASE gradus_db TO $POSTGRES_USER;
@@ -25,5 +25,5 @@ EOSQL
 
 echo "Bases de datos creadas:"
 echo "  identity_db    -> Identity API"
-echo "  universitas_db -> Universitas API"
+echo "  portal_db      -> Portal API"
 echo "  gradus_db      -> Gradus API"

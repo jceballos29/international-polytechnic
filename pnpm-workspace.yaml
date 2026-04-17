@@ -1,9 +1,9 @@
 packages:
-  - "apps/*"
-  - "packages/*"
+  - 'src/apps/*'
+  - 'src/packages/*'
 allowBuilds:
-  "@parcel/watcher": true
-  "@swc/core": true
+  '@parcel/watcher': true
+  '@swc/core': true
   cypress: true
   less: true
   nx: true

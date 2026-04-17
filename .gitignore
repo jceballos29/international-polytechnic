@@ -23,6 +23,11 @@ coverage/
 .nx/
 
 # ==========================================
+# C# Dev Kit — Language Service Cache
+# ==========================================
+**/*.lscache
+
+# ==========================================
 # Claude Code / AI Agents
 # ==========================================
 .claude/worktrees
@@ -60,7 +65,3 @@ docker-compose.override.yml
 # ==========================================
 .DS_Store
 Thumbs.db
-
-# Next.js
-.next
-out

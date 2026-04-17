@@ -133,7 +133,7 @@ importers:
         specifier: ^8.40.0
         version: 8.58.2(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
 
-  apps/identity-ui:
+  src/apps/admin-panel:
     dependencies:
       next:
         specifier: ~16.1.6
@@ -145,7 +145,41 @@ importers:
         specifier: ^19.0.0
         version: 19.2.5(react@19.2.5)
 
-  apps/identity-ui-e2e: {}
+  src/apps/gradus-ui:
+    dependencies:
+      next:
+        specifier: ~16.1.6
+        version: 16.1.7(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(sass@1.99.0)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.5
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.5(react@19.2.5)
+
+  src/apps/identity-ui:
+    dependencies:
+      next:
+        specifier: ~16.1.6
+        version: 16.1.7(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(sass@1.99.0)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.5
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.5(react@19.2.5)
+
+  src/apps/portal:
+    dependencies:
+      next:
+        specifier: ~16.1.6
+        version: 16.1.7(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(sass@1.99.0)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.5
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.5(react@19.2.5)
 
 packages:
 

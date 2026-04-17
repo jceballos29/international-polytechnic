@@ -1,19 +1,19 @@
 {
-  "extends": "./tsconfig.base.json",
-  "compileOnSave": false,
-  "files": [],
-  "references": [
-    {
-      "path": "./apps/identity-ui"
-    },
-    {
-      "path": "./apps/admin-panel"
-    },
-    {
-      "path": "./apps/portal"
-    },
-    {
-      "path": "./apps/gradus-ui"
-    }
-  ]
+	"extends": "./tsconfig.base.json",
+	"compileOnSave": false,
+	"files": [],
+	"references": [
+		{
+			"path": "./src/apps/identity-ui"
+		},
+		{
+			"path": "./src/apps/admin-panel"
+		},
+		{
+			"path": "./src/apps/portal"
+		},
+		{
+			"path": "./src/apps/gradus-ui"
+		}
+	]
 }

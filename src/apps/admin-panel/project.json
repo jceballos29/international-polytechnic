@@ -1,0 +1,13 @@
+{
+	"name": "admin-panel",
+	"tags": ["type:frontend", "scope:admin-panel"],
+	"implicitDependencies": ["identity-ui"],
+	"targets": {
+		"dev": {
+			"command": "next dev --port 3001",
+			"options": {
+				"cwd": "{projectRoot}"
+			}
+		}
+	}
+}

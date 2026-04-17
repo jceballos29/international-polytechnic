@@ -29,9 +29,23 @@ cp .env.example .env
 # 2. Levantar infraestructura base
 docker compose up postgresql redis -d
 
-# 3. Ver el grafo de proyectos
+# 3. Configurar credenciales locales de BD (una sola vez por máquina)
+cd src/apps/identity/src/Identity.API
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" \
+  "Host=localhost;Port=5432;Database=identity_db;Username=postgres;Password=<tu-contraseña>"
+
+cd ../../../../apps/gradus/src/Gradus.API
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" \
+  "Host=localhost;Port=5432;Database=gradus_db;Username=postgres;Password=<tu-contraseña>"
+
+# 4. Ver el grafo de proyectos
 pnpm graph
 ```
+
+> **¿Por qué User Secrets?** Las contraseñas se almacenan en
+> `~/.microsoft/usersecrets/<id>/secrets.json`, fuera del repositorio.
+> Cada desarrollador configura sus propias credenciales locales.
+> La contraseña por defecto del entorno Docker es `secret` (ver `.env.example`).
 
 ## Comandos de desarrollo
 

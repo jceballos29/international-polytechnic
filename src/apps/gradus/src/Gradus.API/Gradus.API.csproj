@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web"><PropertyGroup>  <UserSecretsId>99660d5b-be0d-4629-8315-239bdc6e097d</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.6" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.1.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gradus.Application\Gradus.Application.csproj" />
+    <ProjectReference Include="..\Gradus.Infrastructure\Gradus.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
