@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Gradus.API/Gradus.API.csproj" />
+    <Project Path="src/Gradus.Application/Gradus.Application.csproj" />
+    <Project Path="src/Gradus.Domain/Gradus.Domain.csproj" />
+    <Project Path="src/Gradus.Infrastructure/Gradus.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Gradus.Application.Tests/Gradus.Application.Tests.csproj" />
+    <Project Path="tests/Gradus.Domain.Tests/Gradus.Domain.Tests.csproj" />
+    <Project Path="tests/Gradus.Integration.Tests/Gradus.Integration.Tests.csproj" />
+  </Folder>
+</Solution>

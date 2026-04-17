@@ -1,0 +1,10 @@
+{
+  "name": "identity-ui",
+  "tags": ["type:frontend", "scope:identity"],
+  "implicitDependencies": ["Identity.API"],
+  "targets": {
+    "dev": {
+      "command": "next dev --port 3000"
+    }
+  }
+}

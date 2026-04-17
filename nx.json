@@ -2,6 +2,57 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "nxCloudId": "69e17f0c30451d92c9668592",
   "analytics": true,
+  "defaultBase": "main",
+  "namedInputs": {
+    "default": [
+      "{projectRoot}/**/*",
+      "{workspaceRoot}/nx.json"
+    ],
+    "production": [
+      "default",
+      "!{projectRoot}/**/*.spec.{ts,tsx,js,jsx}",
+      "!{projectRoot}/**/*.test.{ts,tsx,js,jsx}",
+      "!{projectRoot}/**/*.cy.{ts,tsx,js,jsx}",
+      "!{projectRoot}/jest.config.*",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/**/*.Tests/**/*",
+      "!{projectRoot}/**/bin/**/*",
+      "!{projectRoot}/**/obj/**/*"
+    ]
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ],
+      "cache": true,
+      "inputs": [
+        "production",
+        "^production"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "^build"
+      ],
+      "cache": true,
+      "inputs": [
+        "default",
+        "^production"
+      ],
+      "outputs": [
+        "{projectRoot}/coverage"
+      ]
+    },
+    "lint": {
+      "cache": true
+    },
+    "e2e-ci--**/*": {
+      "dependsOn": [
+        "^build"
+      ]
+    }
+  },
   "plugins": [
     {
       "plugin": "@nx/next/plugin",
@@ -51,13 +102,6 @@
     },
     "@nx/dotnet"
   ],
-  "targetDefaults": {
-    "test": {
-      "dependsOn": [
-        "^build"
-      ]
-    }
-  },
   "generators": {
     "@nx/next": {
       "application": {
@@ -65,16 +109,5 @@
         "linter": "eslint"
       }
     }
-  },
-  "namedInputs": {
-    "default": [
-      "{projectRoot}/**/*"
-    ],
-    "production": [
-      "default",
-      "!{projectRoot}/**/*.Tests/**/*",
-      "!{projectRoot}/**/bin/**/*",
-      "!{projectRoot}/**/obj/**/*"
-    ]
   }
 }

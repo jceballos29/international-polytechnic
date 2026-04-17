@@ -1,0 +1,35 @@
+{
+  "name": "workspace",
+  "targets": {
+    "dev:identity": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm nx run-many -t dev -p tag:scope:identity --parallel"
+      }
+    },
+    "dev:admin": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm nx run-many -t dev -p tag:scope:identity,tag:scope:admin-panel --parallel"
+      }
+    },
+    "dev:portal": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm nx run-many -t dev -p tag:scope:identity,tag:scope:portal --parallel"
+      }
+    },
+    "dev:gradus": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm nx run-many -t dev -p tag:scope:identity,tag:scope:portal,tag:scope:gradus --parallel"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm nx run-many -t dev --parallel"
+      }
+    }
+  }
+}

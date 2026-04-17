@@ -1,0 +1,10 @@
+{
+  "name": "portal",
+  "tags": ["type:frontend", "scope:portal"],
+  "implicitDependencies": ["identity-ui", "Identity.API"],
+  "targets": {
+    "dev": {
+      "command": "next dev --port 3002"
+    }
+  }
+}
