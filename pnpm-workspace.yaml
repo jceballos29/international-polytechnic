@@ -6,6 +6,7 @@ allowBuilds:
   '@swc/core': true
   cypress: true
   less: true
+  msw: true
   nx: true
   sharp: true
   unrs-resolver: true

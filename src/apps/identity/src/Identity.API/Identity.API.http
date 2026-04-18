@@ -1,8 +1,97 @@
-# Identity API — HTTP Client
-# Requiere extensión "REST Client" en VS Code
-# Los endpoints OAuth se agregan aquí en la Fase 2
-
+# Identity API — Flujo completo Authorization Code + PKCE
 @host = http://localhost:5000
+
+# ── Variables del flujo ────────────────────────────────────
+@client_id = portal
+@redirect_uri = http://localhost:3002/api/auth/callback
+@code_verifier = 0MugUPSbkW4r3Hm_w9CVOyON43UJuKmJIDVWSIo1JuI
+@code_challenge = GAuNz_WkCWdkigQtmjbcxheYZ0Tm9hx1GKO8MGUYelg
+@client_secret = portal-secret-change-me
+
+# ════════════════════════════════════════════════════════════
+# PASO 0 — Verificar que el servidor responde
+# ════════════════════════════════════════════════════════════
 
 ### Health check
 GET {{host}}/health
+
+###
+
+### Discovery Document — verifica endpoints disponibles
+GET {{host}}/.well-known/openid-configuration
+
+###
+
+### JWKS — clave pública RSA
+GET {{host}}/.well-known/jwks.json
+
+###
+
+# ════════════════════════════════════════════════════════════
+# PASO 1 — Login del usuario
+# El frontend llama a este endpoint con las credenciales
+# ════════════════════════════════════════════════════════════
+
+### POST /auth/login
+# @name loginResponse
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@localhost.com",
+  "password": "Admin1234!",
+  "clientId": "{{client_id}}",
+  "redirectUri": "{{redirect_uri}}",
+  "codeChallenge": "{{code_challenge}}",
+  "codeChallengeMethod": "S256",
+  "state": "random-state-abc123"
+}
+
+###
+
+# ════════════════════════════════════════════════════════════
+# PASO 2 — Intercambiar el code por tokens
+# Copia el "code" de la respuesta del PASO 1 aquí abajo
+# ════════════════════════════════════════════════════════════
+
+### POST /oauth/token — authorization_code
+# Reemplaza CODE_AQUI con el valor recibido en el paso 1
+@authorization_code = N2O0pT6KM1fdXzGgPXlIc6buc5463HPzQ9U2LjH7ObA
+
+POST {{host}}/oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&code={{authorization_code}}&code_verifier={{code_verifier}}&client_id={{client_id}}&client_secret={{client_secret}}&redirect_uri={{redirect_uri}}
+
+###
+
+# ════════════════════════════════════════════════════════════
+# PASO 3 — Renovar el access token con refresh token
+# Copia el "refreshToken" de la respuesta del PASO 2
+# ════════════════════════════════════════════════════════════
+
+### POST /oauth/token — refresh_token
+@refresh_token = _MTQPZy4Hww2Q2o_W7U9pubuPKsbINmogp86owyOG8c
+
+POST {{host}}/oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token&refresh_token={{refresh_token}}&client_id={{client_id}}&client_secret={{client_secret}}
+
+###
+
+# ════════════════════════════════════════════════════════════
+# PASO 4 — Revocar el refresh token (logout)
+# ════════════════════════════════════════════════════════════
+
+### POST /oauth/revoke
+POST {{host}}/oauth/revoke
+Content-Type: application/x-www-form-urlencoded
+
+token={{refresh_token}}&token_type_hint=refresh_token&client_id={{client_id}}&client_secret={{client_secret}}
+
+### UserInfo — con Access Token válido
+@access_token = eyJhbGciOiJSUzI1NiIsImtpZCI6ImlkZW50aXR5LWtleS12MSIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5Njk0NjFkOS1mZDg5LTRiNTgtYmFhMy05OWFlNWJlMjk5YTYiLCJlbWFpbCI6ImFkbWluQGxvY2FsaG9zdC5jb20iLCJqdGkiOiJlN2YzNmNlNS02YjRhLTRjMDAtYWM1YS00MzliNzdiMThhYTciLCJ0ZW5hbnRfaWQiOiI1YzI5ODUzMy03NWQ2LTQ2NWUtYTJlZS02OWMxNjVmYmNiNWIiLCJjbGllbnRfaWQiOiJwb3J0YWwiLCJuYW1lIjoiU3VwZXIgQWRtaW4iLCJnaXZlbl9uYW1lIjoiU3VwZXIiLCJmYW1pbHlfbmFtZSI6IkFkbWluIiwicm9sZSI6InN1cGVyX2FkbWluIiwibmJmIjoxNzc1NTIzMzA1LCJleHAiOjE3NzU1MjQyMDUsImlhdCI6MTc3NTUyMzMwNSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAwIiwiYXVkIjoicG9ydGFsIn0.OXQDva9HV5qVmNpCYkXeEsDsnrBsDxB-jR3hlavS89Gp-kKPhDSbXHB0o1krsa5F-Mni8etcaurQr8A6xoDiAksmxx8qDX7FlSjJ01kXVwBVs_zcpLsLduG6_wBcWY9t-7o0KdZXE3IBarL8Fy_qnveWF3SWQxkvv7S-CX0HjRNSsPEGUo9EVKLBKG2LxN0JVtPbjt5djkOq9Dtdr3VnCMYh9HSBbUk6VvnTQ9kyiPQJ_fXYrZpnYKNf07dLKF2bFCamvZHQYh4IkioSLLtBVNfZDJnDY5cQVVoyBFBnaDpcqWl07Q14vZT5jUEmErmZ6sqTUOIFwP9PLOHRau3nbw
+
+GET {{host}}/oauth/userinfo
+Authorization: Bearer {{access_token}}

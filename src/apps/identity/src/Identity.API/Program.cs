@@ -1,46 +1,79 @@
+using System.Security.Cryptography;
+using Identity.API.Middleware;
+using Identity.Application;
+using Identity.Infrastructure;
+using Identity.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// ── Servicios ──────────────────────────────────────────────
-// Aquí registraremos todos los servicios en las fases siguientes.
-// Por ahora solo lo mínimo para que el servidor arranque.
-
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
 
-// CORS — permite peticiones desde los frontends en desarrollo
+// ── Application + Infrastructure ───────────────────────────
+var mediatRLicense = builder.Configuration["MediatR:LicenseKey"];
+builder.Services.AddApplication(mediatRLicense);
+builder.Services.AddInfrastructure(builder.Configuration);
+
+// ── Autenticación JWT Bearer ───────────────────────────────
+var publicKeyPath = builder.Configuration["Jwt:PublicKeyPath"] ?? "keys/public.pem";
+var publicRsa = RSA.Create();
+publicRsa.ImportFromPem(File.ReadAllText(publicKeyPath));
+
+builder
+    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new RsaSecurityKey(publicRsa),
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+// ── CORS ───────────────────────────────────────────────────
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins(
-                "http://localhost:3000",
-                "http://localhost:3001",
-                "http://localhost:3002",
-                "http://localhost:3003")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+    options.AddPolicy(
+        "IdentityUi",
+        policy =>
+            policy
+                .WithOrigins("http://localhost:3000", "http://localhost:3002")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+    );
 });
 
-// ── Pipeline HTTP ───────────────────────────────────────────
+// ════════════════════════════════════════════════════════════
 var app = builder.Build();
 
-app.UseCors();
+// ── Seed inicial ───────────────────────────────────────────
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    await seeder.SeedAsync();
+}
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "Identity API v1"));
-}
-else
-{
+// ── Middleware pipeline ────────────────────────────────────
+// El orden importa — cada middleware envuelve al siguiente
+app.UseMiddleware<ExceptionMiddleware>(); // 1. captura excepciones
+app.UseCors("IdentityUi"); // 2. CORS headers
+app.UseAuthentication(); // 3. valida JWT
+app.UseAuthorization(); // 4. verifica permisos
+
+if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
-}
 
 app.MapControllers();
 
-// Endpoint de salud — Docker y Kubernetes lo usan para
-// saber si el servicio está vivo antes de enviarle tráfico
 app.MapGet("/health", () => Results.Ok(new { status = "healthy" })).WithTags("Health");
 
 app.Run();

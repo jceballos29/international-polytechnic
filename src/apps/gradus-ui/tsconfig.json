@@ -24,23 +24,25 @@
 		"rootDir": "."
 	},
 	"include": [
-		"app/**/*.ts",
-		"app/**/*.tsx",
-		"app/**/*.js",
-		"app/**/*.jsx",
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"**/*.mts",
 		".next/types/**/*.ts",
-		"../../../dist/apps/gradus-ui/.next/types/**/*.ts",
-		"next-env.d.ts"
+		"../../../dist/apps/gradus-ui/.next/types/**/*.ts"
 	],
 	"exclude": [
-		"out-tsc",
-		"dist",
 		"node_modules",
+		"dist",
+		"out-tsc",
+		".next",
+		"specs",
+		"**/*.spec.ts",
+		"**/*.spec.tsx",
+		"**/*.test.ts",
+		"**/*.test.tsx",
 		"jest.config.ts",
 		"jest.config.cts",
-		"app/**/*.spec.ts",
-		"app/**/*.test.ts",
-		".next",
 		"eslint.config.js",
 		"eslint.config.cjs",
 		"eslint.config.mjs"

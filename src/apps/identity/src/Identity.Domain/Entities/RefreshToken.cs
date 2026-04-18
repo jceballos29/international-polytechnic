@@ -40,6 +40,8 @@ public class RefreshToken : BaseEntity
 
     public string? IssuedFromIp { get; private set; }
 
+    public string SessionId { get; private set; } = string.Empty;
+
     public User? User { get; private set; }
     public ClientApplication? ClientApplication { get; private set; }
 
@@ -50,6 +52,7 @@ public class RefreshToken : BaseEntity
         Guid clientApplicationId,
         string tokenHash,
         List<string> scopes,
+        string sessionId,
         int expiryDays = 30,
         string? issuedFromIp = null
     )
@@ -67,6 +70,7 @@ public class RefreshToken : BaseEntity
             ClientApplicationId = clientApplicationId,
             TokenHash = tokenHash,
             Scopes = scopes,
+            SessionId = sessionId,
             ExpiresAt = DateTime.UtcNow.AddDays(expiryDays),
             IssuedFromIp = issuedFromIp,
             CreatedAt = DateTime.UtcNow,

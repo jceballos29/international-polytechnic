@@ -47,6 +47,8 @@ public class AuthorizationCode : BaseEntity
     /// </summary>
     public string? State { get; private set; }
 
+    public string SessionId { get; private set; } = string.Empty;
+
     public DateTime ExpiresAt { get; private set; }
 
     /// <summary>Null = aún no se ha intercambiado.</summary>
@@ -64,6 +66,7 @@ public class AuthorizationCode : BaseEntity
         string redirectUri,
         List<string> scopes,
         string codeChallenge,
+        string sessionId,
         string? state = null
     )
     {
@@ -85,6 +88,7 @@ public class AuthorizationCode : BaseEntity
             RedirectUri = redirectUri,
             Scopes = scopes,
             CodeChallenge = codeChallenge,
+            SessionId = sessionId,
             CodeChallengeMethod = "S256",
             State = state,
             ExpiresAt = DateTime.UtcNow.AddMinutes(2),
