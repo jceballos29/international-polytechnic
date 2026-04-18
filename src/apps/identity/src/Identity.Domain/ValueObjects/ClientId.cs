@@ -2,7 +2,25 @@ using System.Text.RegularExpressions;
 
 namespace Identity.Domain.ValueObjects;
 
-public class ClientId : ValueObject
+/// <summary>
+/// Identificador público de una aplicación cliente registrada en el IdP.
+///
+/// Reglas de formato:
+///   - Solo letras minúsculas, números y guiones
+///   - Entre 3 y 100 caracteres
+///   - Debe empezar con una letra
+///   - No puede terminar con guión
+///
+/// Ejemplos válidos:   "portal", "admin-panel", "gradus-api"
+/// Ejemplos inválidos: "Portal" (mayúscula), "mi app" (espacio),
+///                     "-portal" (empieza con guión), "app-" (termina con guión)
+///
+/// ¿Por qué estas restricciones?
+/// El ClientId viaja en URLs de OAuth:
+///   /oauth/authorize?client_id=portal
+/// Caracteres especiales en URLs causan problemas de encoding.
+/// </summary>
+public sealed class ClientId : ValueObject
 {
     private static readonly Regex ClientIdRegex = new(
         @"^[a-z][a-z0-9\-]{1,98}[a-z0-9]$",
@@ -16,36 +34,43 @@ public class ClientId : ValueObject
     public static ClientId Create(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException("ClientId cannot be null or empty.", nameof(value));
+            throw new ArgumentException("El ClientId no puede estar vacío.", nameof(value));
 
         var normalized = value.Trim().ToLowerInvariant();
 
         if (normalized.Length < 3)
             throw new ArgumentException(
-                "ClientId must be at least 3 characters long.",
+                "El ClientId debe tener al menos 3 caracteres.",
                 nameof(value)
             );
 
         if (normalized.Length > 100)
             throw new ArgumentException(
-                "ClientId cannot be longer than 100 characters.",
+                "El ClientId no puede tener más de 100 caracteres.",
                 nameof(value)
             );
 
         if (!ClientIdRegex.IsMatch(normalized))
             throw new ArgumentException(
-                $"'{value}' is not a valid ClientId. It must start with a letter, can contain lowercase letters, numbers, and hyphens, and must end with a letter or number."
-                    + $" Examples: 'portal', 'gradus-api', 'a1b2c3'.",
+                $"'{value}' no es un ClientId válido. "
+                    + "Use solo letras minúsculas, números y guiones. "
+                    + "Debe empezar con letra y no terminar con guión. "
+                    + "Ejemplo: 'portal', 'gradus-api'",
                 nameof(value)
             );
 
         return new ClientId(normalized);
     }
 
+    /// <summary>
+    /// Genera un ClientId sugerido a partir de un nombre legible.
+    /// "Portal Estudiantil" → "portal-estudiantil"
+    /// Útil al registrar una nueva app desde el admin-panel.
+    /// </summary>
     public static ClientId GenerateFrom(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Name cannot be null or empty.", nameof(name));
+            throw new ArgumentException("El nombre no puede estar vacío.", nameof(name));
 
         var generated = name.Trim()
             .ToLowerInvariant()
